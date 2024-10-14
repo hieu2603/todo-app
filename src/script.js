@@ -2,6 +2,24 @@ const todoForm = document.querySelector('form');
 const todoInput = document.getElementById('todo-input');
 const todoListUL = document.getElementById('todo-list');
 const addButton = document.getElementById('add-button');
+const clearButton = document.getElementById('clear-button');
+
+const dragArea = document.getElementById('todo-list');
+new Sortable(dragArea, {
+    animation: 500,
+
+    onEnd: () => {
+        const updatedTasks = [];
+        document.querySelectorAll('#todo-list li').forEach((li) => {
+            const id = li.id;
+            const task = tasks.find(task => task.id === parseInt(id));
+            updatedTasks.push(task);
+        });
+
+        tasks = updatedTasks;
+        saveLocalStorage();
+    }
+});
 
 let isEditing = false;
 let currentEditId = null;
@@ -142,6 +160,6 @@ function saveLocalStorage() {
 
 function getLocalStorage() {
     const tasks = localStorage.getItem('tasks');
-    
+
     return tasks ? JSON.parse(tasks) : [];
 }
